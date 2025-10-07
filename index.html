@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Crop Defender </title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="database.js"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+    <div id="gameWrap">
+        <canvas id="c" width="900" height="600"></canvas>
+        
+        <div id="ui">
+            <div class="panel">
+                <h1>Crop Defender </h1>
+                
+                <div style="margin-bottom:8px">
+                    Controls: 
+                    <strong>WASD</strong> / arrows • 
+                    <strong>Space</strong> shoot • 
+                    <strong>E</strong> water • 
+                    <strong>R</strong> repair
+                </div>
+                
+                <div>Goal: keep crops alive until the timer ends.</div>
+                
+                <label>Difficulty: </label>
+                <select id="difficulty">
+                    <option>Easy</option>
+                    <option selected>Normal</option>
+                    <option>Hard</option>
+                </select>
+                
+                <div style="margin-top:8px">
+                    <button id="start">Start Game</button>
+                    <button id="reset">Reset</button>
+                </div>
+            </div>
+
+            <div class="panel" id="statusPanel" style="margin-top:12px">
+                <div class="stat">
+                    <strong>Time</strong>: <span id="time">--</span>
+                </div>
+                
+                <div class="stat">
+                    <strong>Crops</strong>: <span id="crops">--</span> / <span id="cropQuota">--</span>
+                </div>
+                
+                <div class="stat">
+                    <strong>Walls</strong> (HP): <span id="wallsHP">--</span>
+                </div>
+                
+                <div class="stat">
+                    <strong>Thieves alive</strong>: <span id="thievesCount">0</span>
+                </div>
+                
+                <div class="stat">
+                    <strong>Messages</strong>: 
+                    <div id="msg" style="margin-top:6px;min-height:28px"></div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-top:12px">
+                <div style="font-size:13px;opacity:.9">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
