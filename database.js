@@ -1,27 +1,26 @@
-// --- database.js ---
-// Difficulty settings 
+
 const DIFF = {
     'Easy': {
-        spawnInterval: 3000,
+        spawnInterval: 5000,
         wallHP: 100,
         cropTimer: 18000,
-        timeToWin: 70,
-        thievesPerWave: 1,
+        timeToWin: 30,
+        thievesPerWave: 0.5,
         cropQuota: 2
     },
     'Normal': {
         spawnInterval: 2400,
         wallHP: 80,
         cropTimer: 14000,
-        timeToWin: 90,
+        timeToWin: 40,
         thievesPerWave: 1,
         cropQuota: 2
     },
     'Hard': {
-        spawnInterval: 1800,
+        spawnInterval: 3000,
         wallHP: 60,
-        cropTimer: 11000,
-        timeToWin: 120,
+        cropTimer: 18000,
+        timeToWin: 50,
         thievesPerWave: 2,
         cropQuota: 3
     }

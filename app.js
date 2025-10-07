@@ -1,4 +1,4 @@
-// --- app.js ---
+
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 const W = canvas.width, H = canvas.height;
@@ -47,38 +47,41 @@ function startGame() {
 }
 
 function initState() {
-    player = { x: W/2, y: H - 100, w: 28, h: 28, speed: 180 }; // Player near bottom
+    player = { x: W/2, y: H - 100, w: 28, h: 28, speed: 180 };
     walls = [];
     bullets = [];
     thieves = [];
     const cfg = DIFF[difficulty] || DIFF['Normal'];
     
-    // Horizontal walls at the top
+   
     for (let i = 0; i < 5; i++) {
         walls.push({
-            x: 150 + i * 120,  // Spread horizontally
-            y: 80,             // Positioned at top
-            w: 100,            // Wider walls
-            h: 20,             // Thinner walls (horizontal orientation)
+            x: 150 + i * 120,  
+            y: 80,             
+            w: 100,            
+            h: 20,             
             hp: cfg.wallHP,
             maxHp: cfg.wallHP,
             broken: false
         });
     }
+
+
     
-    crops = [];
-    // Crops centered at bottom
-    for (let i = 0; i < 3; i++) {
-        crops.push({
-            x: W/2 - 200 + i * 200,  // Centered horizontally
-            y: H - 120,               // Positioned at bottom
-            w: 140,
-            h: 80,
-            waterTimer: cfg.cropTimer,
-            maxTimer: cfg.cropTimer,
-            alive: true
-        });
-    }
+   crops = [];
+const totalCropWidth = 3 * 140; 
+const startX = (W - totalCropWidth) / 2; 
+for (let i = 0; i < 3; i++) {
+    crops.push({
+        x: startX + i * 150, 
+        y: H - 120,
+        w: 140,
+        h: 80,
+        waterTimer: cfg.cropTimer,
+        maxTimer: cfg.cropTimer,
+        alive: true
+    });
+}
 }
 
 const keys = {};
@@ -91,14 +94,14 @@ addEventListener('keyup', e => {
 });
 
 function spawnThief() {
-    const x = 150 + Math.random() * (W - 300);  // Spawn across top width
+    const x = 150 + Math.random() * (W - 300);  
     thieves.push({
         x: x,
-        y: -20,  // Start above canvas
+        y: -20,  
         r: 12,
         speed: 30 + Math.random() * 20,
         dmg: 2 + Math.floor(Math.random() * 2),
-        target: Math.floor(Math.random() * walls.length),  // Target random wall
+        target: Math.floor(Math.random() * walls.length),  
         hp: 8
     });
 }
@@ -113,7 +116,7 @@ function update(dt) {
     if (keys['d'] || keys['arrowright']) player.x += s;
     
     player.x = Math.max(10, Math.min(W - 10, player.x));
-    player.y = Math.max(H - 200, Math.min(H - 10, player.y));  // Constrain to bottom area
+    player.y = Math.max(H - 200, Math.min(H - 10, player.y));  
 
     // water crops
     if (keys['e']) {
@@ -124,23 +127,14 @@ function update(dt) {
         }
     }
     
-    // repair walls
-    if (keys['r']) {
-        for (const w of walls) {
-            if (dist(player, w) < 80 && !w.broken) {
-                w.hp = Math.min(w.maxHp, w.hp + 40 * dt);
-            }
-        }
-    }
-    
-    // shooting - bullets go upward
+    // shooting 
     if (keys[' ']) {
         if (!player.shootCooldown || player.shootCooldown <= 0) {
             bullets.push({ 
                 x: player.x + player.w/2, 
                 y: player.y, 
-                vx: 0,      // No horizontal movement
-                vy: -400,    // Upward movement
+                vx: 0,      
+                vy: -400,    
                 r: 4 
             });
             player.shootCooldown = 0.35;
@@ -179,14 +173,14 @@ function update(dt) {
                 if (w.hp <= 0) {
                     w.broken = true;
                     w.hp = 0;
-                    loseCrops(1);
+                    loseCrops();
                 }
             }
         } else {
             
             t.y += t.speed * dt;
             if (t.y > H - 60) {  
-                loseCrops(1);
+                loseCrops();
                 thieves.splice(i, 1);
                 continue;
             }
@@ -212,7 +206,7 @@ function update(dt) {
         c.waterTimer -= dt * 1000;
         if (c.waterTimer <= 0) {
             c.alive = false;
-            loseCrops(1);
+            loseCrops();
         }
     }
 
@@ -226,10 +220,10 @@ function update(dt) {
     }
 }
 
-function loseCrops(n) {
-    for (let i = 0; i < n; i++) {
-        const alive = crops.find(c => c.alive);
-        if (alive) alive.alive = false;
+function loseCrops(){
+    const aliveCrops = crops.filter(c => c.alive);
+    if (aliveCrops.length > 0) {
+        aliveCrops[0].alive = false; 
     }
 }
 
