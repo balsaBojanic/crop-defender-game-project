@@ -237,22 +237,36 @@ function loop(ts) {
     if (running) requestAnimationFrame(loop);
 }
 
+const images = {
+    player: new Image(),
+    thief: new Image(),
+    crop: new Image()
+};
+
+images.player.src = 'cowboy.png';
+images.thief.src = 'viking.png';
+images.crop.src = 'carrot.png';
+
+let imagesLoaded = 0;
+Object.values(images).forEach(img => {
+    img.onload = () => {
+        imagesLoaded++;
+        if (imagesLoaded === Object.keys(images).length) {
+            draw();
+        }
+    };
+});
+
 function draw() {
     ctx.clearRect(0, 0, W, H);
     
-    
     ctx.fillStyle = '#2c5';
     ctx.fillRect(0, 0, W, 120);  
-    
-    
-    ctx.fillStyle = '#2c5';
     ctx.fillRect(0, H - 160, W, 160);  
-    
     
     for (const w of walls) {
         ctx.fillStyle = w.broken ? '#333' : (w.hp / w.maxHp > 0.5 ? '#855' : '#a53');
         ctx.fillRect(w.x, w.y, w.w, w.h);
-        
         
         ctx.fillStyle = '#111';
         ctx.fillRect(w.x - 2, w.y - 12, w.w + 4, 8);
@@ -260,24 +274,29 @@ function draw() {
         ctx.fillRect(w.x - 2, w.y - 12, (w.hp / w.maxHp) * (w.w + 4), 8);
     }
     
-    
     for (const c of crops) {
-        ctx.fillStyle = c.alive ? '#3a3' : '#4a4';
-        ctx.fillRect(c.x, c.y, c.w, c.h);
-        
+        if (c.alive) {
+            if (imagesLoaded === 3) {
+                ctx.drawImage(images.crop, c.x, c.y, 140, 80);
+            } else {
+                ctx.fillStyle = '#3a3';
+                ctx.fillRect(c.x, c.y, c.w, c.h);
+            }
+        }
         
         ctx.fillStyle = '#111';
         ctx.fillRect(c.x, c.y - 12, c.w, 8);
-        
         const frac = Math.max(0, c.waterTimer / c.maxTimer);
         ctx.fillStyle = frac > 0.6 ? '#0ff' : (frac > 0.2 ? '#ff8' : '#f65');
         ctx.fillRect(c.x, c.y - 12, c.w * frac, 8);
     }
     
-    
-    ctx.fillStyle = '#08f';
-    ctx.fillRect(player.x - player.w / 2, player.y - player.h / 2, player.w, player.h);
-    
+    if (imagesLoaded === 3) {
+        ctx.drawImage(images.player, player.x - 20, player.y - 20, 80, 80);
+    } else {
+        ctx.fillStyle = '#08f';
+        ctx.fillRect(player.x - player.w/2, player.y - player.h/2, player.w, player.h);
+    }
     
     for (const b of bullets) {
         ctx.beginPath();
@@ -286,12 +305,15 @@ function draw() {
         ctx.fill();
     }
     
-    
     for (const t of thieves) {
-        ctx.beginPath();
-        ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2);
-        ctx.fillStyle = '#642';
-        ctx.fill();
+        if (imagesLoaded === 3) {
+            ctx.drawImage(images.thief, t.x - 15, t.y - 15, 80, 80);
+        } else {
+            ctx.beginPath();
+            ctx.arc(t.x, t.y, t.r, 0, Math.PI * 2);
+            ctx.fillStyle = '#642';
+            ctx.fill();
+        }
     }
     
     const elapsed = running ? (performance.now() - gameStart) / 1000 : 0;
