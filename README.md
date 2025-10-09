@@ -1,4 +1,4 @@
-[img](Screenshot 2025-10-09 at 12.15.22.png)
+![img](https://github.com/balsaBojanic/crop-defender-game-project/blob/main/Screenshot%202025-10-09%20at%2012.15.22.png?raw=true)
 # Getting started
     Choose difficulty and press start game to begin playing
     Use WASD/Arrows for movement *spacebar* for shooting and *E* for watering the carrots
